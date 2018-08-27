@@ -37,11 +37,14 @@ http://12bme.tistory.com/154 참고함...
 하둡에서의 Divide and Conquer  
 default상태의 Apache Access log를 하둡의 맵리듀스를 이용하여, HTTP Response Code의 수를 파악하는 Task를 한다고 치자.  
 - Input으로는 수많은 Response Code가 있을 것임.(200, 404, 500, 302 등등...)
-- Input들을 적당한 Delimiter로 쪼갠다 ---> Splitting
-- 수많은 input별로, Delimiter로 쪼개진 Response Code 를 key,value로 매핑한다 ---> Mapping
+- Input들을 적당한 Delimiter로 쪼갠다. 개행이나 공백문자가 되겠지... ---> Splitting
+- Delimiter로 쪼개진 수많은 Response Code 를 key,value로 매핑한다 ---> Mapping
   - 해당 예제에서의 Key,Value설계는 (Respose Code, 출현횟수) 로 정의함.
+  - (200,1), (200,1), (404,1), (500,1), (200,1), (302,1), (500,1)
 - Mapping기준에 의거하여 생성된 데이터들을, key(Response Code)별로 분류한다. 200은 200끼리, 404는 404끼리.... ---> shuffling
+  - {(200,1), (200,1), (200,1)}, {(302,1)} ,{(404,1)}, {(500,1), (500,1)}. 위와 비교해서 일종의 소팅이 됨을 알 수 있음.
 - 내가 설계한 Reduce 알고리즘을 태워(해당 예제에서는 '출현빈도' 출력이니, 당연히 Key가 같은것들끼리 묶어 '+'연산을 취해주는것이 알고리즘이 될 것이다.) 결과값을 얻는다 ---> reducing
+  - {(200,3)}, {(302,1)}, {(404,1)}, {(500,2)}
 - 최종적으로 Reducing까지 된 결과물이 result가 된다.
  
 
