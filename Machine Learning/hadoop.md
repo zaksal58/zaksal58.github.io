@@ -22,9 +22,10 @@
 
 
 # 맵리듀스
-학부시절 알고리즘 시간떄 배웠던 전형적인 Divide and Conquer 방식임.(정작 Divide and Conquer가 뭔지는 다 까먹은게함정..)
-여러개의 Task를 잘개 쪼개어 Task를 간략화 하고, 간략화한 Task내에서 문제를 해결하는 알고리즘의 대표적인 솔루션 중 하나. ex) 머지소트
-Divide and Conquer는 논리 교환법칙과 논리 결합법칙이 성립하는 Task여야 적용 가능.
+학부시절 알고리즘 시간떄 배웠던 전형적인 Divide and Conquer 방식임.(정작 Divide and Conquer가 뭔지는 다 까먹은게함정..)  
+여러개의 Task를 잘개 쪼개어 Task를 간략화 하고, 간략화한 Task내에서 문제를 해결하는 알고리즘의 대표적인 솔루션 중 하나. 
+ex) 머지소트  
+Divide and Conquer는 논리 교환법칙과 논리 결합법칙이 성립하는 Task여야 적용 가능.  
 
 ## 하둡에서의 맵리듀스 과정
 Input데이터를 받아들이고, Splitting, Mapping, Shuffling, Reducing 을 거쳐, 최종적으로 result를 내뱉음.
