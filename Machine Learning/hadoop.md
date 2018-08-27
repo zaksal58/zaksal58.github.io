@@ -12,7 +12,8 @@
   many instance - one filesystem형식.
 - 저장 형식은 구글링해보니 다음과 같이 정리가 될 수 있다.(틀릴수도.) --> https://opentutorials.org/module/2926/17055 참고함..  
 
-![HDFS 저장구조](http://zaksal58.github.io/Machine Learning/Image/6496.png)  
+![HDFS 저장구조](http://zaksal58.github.io/Machine Learning/Image/6496.png)
+![ㅁㄴㅇㄹ](http://cfile24.uf.tistory.com/image/2444873B57E257821FA2AE)
 
 이미지...
 
