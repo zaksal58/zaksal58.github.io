@@ -10,7 +10,7 @@
   - bash마냥, hdfs에다가 커맨드를 날리면, hdfs가 커맨드를 해석하여 원하는 결과값을 출력해 줌.
 - 일반적인 리눅스 파일시스템은, one instance - one filesystem형식인데 반해, 하둡의 HDFS(Hadoop FileSystem)은
   many instance - one filesystem형식.
-- 저장 형식은 구글링해보니 다음과 같이 정리가 될 수 있다.(틀릴수도.) --> https://opentutorials.org/module/2926/17055 참고함..
+- 저장 형식은 구글링해보니 다음과 같이 정리가 될 수 있다.(틀릴수도.) --> https://opentutorials.org/module/2926/17055 참고함..  
 ![HDFS 저장구조](zaksal58.github.io/Machine Learning/Image/6496.png)
 
 
