@@ -30,7 +30,25 @@ IntelliJ나, Eclipse 모두 좋은 Refactor 내장 기능을 갖고 있다.
   
 1개의 문을 pass하는 코드. TDD이니 테스트코드부터 작성.
 ~~~
+public class OneHundredDoors2Test {
+    @Test
+    public void oneDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false}, doorState);
+    }
+}
 ~~~
+  
+1개의 문을 1 pass 하는 동작을 구현한 테스트코드이다.  
+해당 기능을 수행하는 서비스코드는 다음과 같이 작성될 수 있음.
+~~~
+    public boolean[] getDoorState() {
+        boolean[] doorState = new boolean[]{false};
+        return doorState;        
+    }
+~~~
+
 
 
 ## 테스트범위 확인하기
