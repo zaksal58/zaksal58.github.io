@@ -20,7 +20,7 @@ IntelliJ나, Eclipse 모두 좋은 Refactor 내장 기능을 갖고 있다.
 ## 테스트코드 작성해 보기
 간단한 예제를 통하여 본다.... 워크샵 강의떄 배웠던 내용.
 
-> 100개의 문이 있다. 이 문들은 초기상태는 모두 '닫혀있는' 상태이다. 너는 이 100개의 문을 다 'pass'해야 하는 과제를 수행해야 한다. 첫 'pass'는, 모든 문을 방문하면서 문의 상태를 토글(닫혀있다면 열고, 열려있다면 닫고)한다. 두번째 'pass'는, 2,4,6,8.... 과 같이 'pass'의 배수에 해당하는 문만 방문하면서 문의 상태를 토글한다. 같은 세번째 'pass'에서는, 3,6,9,12.... 과 같이 3의 배수에 해당하는 문만 방문하며 문의 상태를 토글하고, 이 반복을 100번째 'pass'까지 진행한다. 이 때, 100개의 문을 100번째 'pass'까지 수행한 후의 모든 문의 상태는?
+> 100개의 문이 있다. 이 문들은 초기상태는 모두 '닫혀있는' 상태이다. 너는 이 100개의 문을 다 'pass'해야 하는 과제를 수행해야 한다. 첫 'pass'는, 모든 문을 방문하면서 문의 상태를 토글(닫혀있다면 열고, 열려있다면 닫고)한다. 두번째 'pass'는, 2,4,6,8.... 과 같이 'pass'의 배수에 해당하는 문만 방문하면서 문의 상태를 토글한다. 다음 세번째 'pass'에서는, 3,6,9,12.... 과 같이 3의 배수에 해당하는 문만 방문하며 문의 상태를 토글하고, 이 반복을 100번째 'pass'까지 진행한다. 이 때, 100개의 문을 100번째 'pass'까지 수행한 후의 모든 문의 상태는?
 
 
 ### 문제 인식
@@ -30,9 +30,9 @@ IntelliJ나, Eclipse 모두 좋은 Refactor 내장 기능을 갖고 있다.
   
 ### 테스트코드를 기반으로 서비스코드를 
 
-1개의 문을 no pass하는 코드(초기상태). TDD이니 테스트코드부터 작성.  
-1개의 문을 no pass 하는 동작을 구현한 테스트코드이다.  
-~~~
+1개의 문(1문)을 no pass하는 코드(초기상태). TDD이니 테스트코드부터 작성.  
+1문 no pass 하는 동작을 구현한 테스트코드이다.  
+~~~java
 public class OneHundredDoors2Test {
     @Test
     public void oneDoorNoPass() throws Exception {
@@ -44,7 +44,7 @@ public class OneHundredDoors2Test {
 ~~~
 
 그리고 테스트코드를 통과할 서비스코드는 다음과 같이 작성될 수 있음.
-~~~
+~~~java
     public boolean[] getDoorState() {
         boolean[] doorState = new boolean[]{false};
         return doorState;        
@@ -54,9 +54,9 @@ public class OneHundredDoors2Test {
 -----------------
 
 뭔가 Hello World 찍는 병맛같은 코드로 보이지만, 테스트케이스 및 동작을 하나하나씩 추가해 보자.  
-1문 no pass 다음의 동작을 1문 1pass. 테스트코드는 이렇게 될거다.  
+1문 no pass 다음의 동작은 1문 1pass가 될 것이다. 테스트코드는 이렇게 될거다.  
 (클래스명은 생략한다.)
-~~~
+~~~java
     @Test
     public void oneDoorNoPass() throws Exception {
         OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
@@ -73,12 +73,12 @@ public class OneHundredDoors2Test {
 
 ~~~
 
-이상한점 1.  
-no pass와 one pass가 assert문만 다르고 행하는 동작이 같다? 논리적으로 말이 안된다. 따라서 다음과 같이 수정을 한다.  
-pass '동작' 추가.... 여기서 집중해야 할 것은, pass하는 동작을 추가한다는 것을, 서비스 코드가 아닌 <span style="color:red">__테스트 코드를 통해__</span> 파악하고, 테스트코드로 인해 서비스코드가 생겼음을 알 수 있다. 이제 Test Driven Develop의 의미를 조금은 알 것 같지 않은가?(라고 말하지만 나도 여기까지밖에 모르는건 함정.)  
+이상한점.  
+no pass와 1 pass가 assert문만 다르고 행하는 동작이 같다? 논리적으로 말이 안된다. 따라서 다음과 같이 수정을 한다.  
+pass '동작' 추가.... 여기서 집중해야 할 것은, pass하는 동작을 추가한다는 것을, :red_circle:__서비스 코드가 아닌 테스트 코드를 통해 파악__:red_circle:하고, 테스트코드로 인해 서비스코드가 생겼음을 알 수 있다. 이제 Test Driven Develop의 의미를 조금은 알 것 같지 않은가?(라고 말하지만 나도 여기까지밖에 모르는건 함정.)  
 
 따라서 pass 메소드를 추가하였다.(솔직히 난 저렇게 생각안하고 생성자에 파라미터를 추가했었었다....ㅜㅜ) 그럼 서비스코드는 이제 pass메소드를 구현하면 될 것이다.
-~~~
+~~~java
     @Test
     public void oneDoorNoPass() throws Exception {
         OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
@@ -96,7 +96,7 @@ pass '동작' 추가.... 여기서 집중해야 할 것은, pass하는 동작을
 ~~~
 
 테스트코드를 통과할 서비스코드는 다음과 같이 작성될 수 있음.
-~~~
+~~~java
 public class OneHundredDoors2 {
 
     boolean[] doorState = new boolean[]{false};
@@ -126,7 +126,7 @@ IntelliJ에서 테스트를 돌려보면 어느 영역이 테스트에 Cover되�
 ### 테스트범위의 확장
 점차적으로 테스트범위를 확장해 본다.
 문을 1개 늘리는 것이 다음 단계로 진화하는 '1분개발로 테스트가 가능한' 범위가 될 수 있겠다.
-~~~
+~~~java
     @Test
     public void oneDoorNoPass() throws Exception {
         OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
@@ -155,7 +155,7 @@ IntelliJ에서 테스트를 돌려보면 어느 영역이 테스트에 Cover되�
 문의 갯수 영역을 적절히 추가하여 테스트코드를 만든다. 
 - 어차피 문의 개수는 초기에 정해지고 고정되는 값이므로, 생성자에 문의 갯수를 추가해도 무방함을 알 수 있겠다..
 - twoDoorNoPass메소드 내 테스트로직에, OneHundredDoors2 생성자 파라미터로 문의 갯수를 추가하면, 나머지 oneDoor메소드들에 대해서도 문의 갯수를 정의하여야 한다.
-~~~
+~~~java
     @Test
     public void oneDoorNoPass() throws Exception {
         OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(1);
@@ -179,7 +179,7 @@ IntelliJ에서 테스트를 돌려보면 어느 영역이 테스트에 Cover되�
     }
 ~~~
 완벽한 테스트코드이다. 이제 실제 서비스코드를 작성해 본다.
-~~~
+~~~java
 public class OneHundredDoors2 {
 
     boolean[] doorState;
@@ -200,9 +200,9 @@ public class OneHundredDoors2 {
 이전과 변경된 점이라면
 - 생성자를 통해 doorState문 갯수 및 상태 생성
 
-그럼 이제 문 2개를 1pass, 2pass까지 완벽히 수행하게 할 수 있는 테스트코드를 작성해 본다.
+그럼 이제 문 2개를 1pass, 2pass까지 완벽히 수행하게 할 수 있는 테스트코드를 작성해 본다.  
 ___1문 테스트코드는 생략한다___
-~~~
+~~~java
     @Test
     public void twoDoorNoPass() throws Exception {
         OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(2);
@@ -228,13 +228,13 @@ ___1문 테스트코드는 생략한다___
     }
 ~~~
 주요 변경점은 다음과 같다.
-- assertArrayEquals 내용이 조금 복잡해졌다(그렇다고 치자.)
+- assertArrayEquals 내용이 조금 복잡해졌다(되게 쉬운 예제라 잘난 개발자분은 복잡해졌다고 생각 안할수 있으나 일단 그렇다고 치자.)
 - pass()가 연속으로 2회 호출되었다.
 
 현재 구현한 pass메소드대로라면, 당연히 이 테스트코드를 돌리는 순간 실패하는 케이스가 나올 것이다.  
 상기 적어낸 2가지 주요 변경점을 고려하여, 실제 서비스코드를 작성해 본다.  
 __아직 뚜렷한 규칙성을 찾을 수 없으므로(우린 잘난 개발자들이지만 일단 그렇다고 치자.)하드코딩을 한다는 느낌으로 코드를 작성한다.__
-~~~
+~~~java
 public class OneHundredDoors2 {
 
     private final int doorCount;
@@ -274,6 +274,9 @@ public class OneHundredDoors2 {
   - 이전 pass상태값을 알아야 한다 --> pass가 몇번 발생하였는지 알아야 한다 --> 클래스 필드 pass 생성
   - 같은 pass라도 문의 개수에 따라 수행하는 동작이 다르다 --> 문의 개수를 알아야 한다 --> 클래스 필드(문의 개수는 가변이 아니므로 상수화) doorCount 생성
 - pass 메소드가 좀 복잡해지기 시작...  
+
+물론 아직까지 뚜렷한 규칙성이나, 리팩토링을 할 만큼의 요소를 찾지 못하였다.
+
 
 
 
