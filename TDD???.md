@@ -28,7 +28,7 @@ IntelliJ나, Eclipse 모두 좋은 Refactor 내장 기능을 갖고 있다.
 100개의 문과 100번의 'pass'가 아닌, 우선 1개의 문을 가지고 작은 영역부터 문제를 해결해 나간다.  
 (사실 우리가 실제 구현하고 해결해야 하는 일련의 서비스로직 내지는 비즈니스 로직은, 문 100개를 100번 pass하는 그런 요구사항이 주어져, 직관적으로 동작을 쪼갤 수 있는 것을 생각해 낼 수 있는 성질의 것이 아니긴 하다....결국 문제 인식과, 전체 요구사항을 간략화 시키는 그 능력은 리팩토링과는 별개로 그 능력을 키워나가야 하는 방안을 별도로 생각해 보아야 할 것 같다는 생각이 들었다.)  
   
-1개의 문을 pass하는 코드. TDD이니 테스트코드부터 작성.
+1개의 문을 no pass하는 코드(초기상태). TDD이니 테스트코드부터 작성.
 ~~~
 public class OneHundredDoors2Test {
     @Test
@@ -40,7 +40,8 @@ public class OneHundredDoors2Test {
 }
 ~~~
   
-1개의 문을 1 pass 하는 동작을 구현한 테스트코드이다.  
+  
+1개의 문을 no pass 하는 동작을 구현한 테스트코드이다.  
 해당 기능을 수행하는 서비스코드는 다음과 같이 작성될 수 있음.
 ~~~
     public boolean[] getDoorState() {
@@ -48,6 +49,73 @@ public class OneHundredDoors2Test {
         return doorState;        
     }
 ~~~
+
+뭔가 Hello World 찍는 병맛같은 코드로 보이지만, 테스트케이스 및 동작을 하나하나씩 추가해 보자.  
+1문 no pass 다음의 동작을 1문 1pass. 테스트코드는 이렇게 될거다.  
+(클래스명은 생략한다.)
+~~~
+    @Test
+    public void oneDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false}, doorState);
+    }
+
+    @Test
+    public void oneDoorOnePass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{true}, doorState);
+    }
+
+~~~
+
+이상한점 1.  
+no pass와 one pass가 assert문만 다르고 행하는 동작이 같다? 논리적으로 말이 안된다. 따라서 다음과 같이 수정을 한다.  
+pass '동작' 추가.... 여기서 집중해야 할 것은, pass하는 동작을 추가한다는 것을, 서비스 코드가 아닌 __테스트 코드를 통해__ 파악하고, 테스트코드로 인해 서비스코드가 생겼음을 알 수 있다. 이제 Test Driven Develop의 의미를 조금은 알 것 같지 않은가?(라고 말하지만 나도 여기까지밖에 모르는건 함정.)
+~~~
+    @Test
+    public void oneDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false}, doorState);
+    }
+
+    @Test
+    public void oneDoorOnePass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        oneHundredDoors2.pass();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{true}, doorState);
+    }
+~~~
+pass 메소드를 추가하였다.(솔직히 난 저렇게 생각안하고 생성자에 파라미터를 추가했었었다....ㅜㅜ) 그럼 서비스코드는 이제 pass메소드를 구현하면 될 것이다.
+
+~~~
+public class OneHundredDoors2 {
+
+    boolean[] doorState = new boolean[]{false};
+
+    public boolean[] getDoorState() {
+        return doorState;
+    }
+
+    public void pass() {
+        doorState[0] = !doorState[0];
+    }
+}
+~~~
+이전과 변경된 점이라면, 
+- doorState 변수가 field로 변경
+- pass메소드를 구현하였고, 토글을 ! unary operator를 붙여 그대로 기존 변수에 assign함
+정도로 파악할 수 있겠다.  
+
+테스트를 돌려보면 모든 서비스로직을 Cover하면서 정상적으로 수행됨을 알 수가 있겠다.  
+내 커스텀 IntelliJ 테마를 기준으로 스크린샷을 떠보면 다음과 같이, 테스트코드가 Cover한 테스트영역은 녹색으로 표시가 된다.  
+
+
+아직 Hello World수준이다. 
+
 
 
 
