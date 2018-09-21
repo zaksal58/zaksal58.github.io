@@ -112,6 +112,8 @@ public class OneHundredDoors2 {
 
 테스트를 돌려보면 모든 서비스로직을 Cover하면서 정상적으로 수행됨을 알 수가 있겠다.  
 내 커스텀 IntelliJ 테마를 기준으로 스크린샷을 떠보면 다음과 같이, 테스트코드가 Cover한 테스트영역은 녹색으로 표시가 된다.  
+![before](https://raw.githubusercontent.com/zaksal58/zaksal58.github.io/master/TDD/image/before_test_covertage.png)
+![after](https://raw.githubusercontent.com/zaksal58/zaksal58.github.io/master/TDD/image/test_coverage.png)
 
 
 아직 Hello World수준이다. 
