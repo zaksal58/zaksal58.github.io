@@ -28,7 +28,10 @@ IntelliJ나, Eclipse 모두 좋은 Refactor 내장 기능을 갖고 있다.
 100개의 문과 100번의 'pass'가 아닌, 우선 1개의 문을 가지고 작은 영역부터 문제를 해결해 나간다.  
 (사실 우리가 실제 구현하고 해결해야 하는 일련의 서비스로직 내지는 비즈니스 로직은, 문 100개를 100번 pass하는 그런 요구사항이 주어져, 직관적으로 동작을 쪼갤 수 있는 것을 생각해 낼 수 있는 성질의 것이 아니긴 하다....결국 문제 인식과, 전체 요구사항을 간략화 시키는 그 능력은 리팩토링과는 별개로 그 능력을 키워나가야 하는 방안을 별도로 생각해 보아야 할 것 같다는 생각이 들었다.)  
   
-1개의 문을 no pass하는 코드(초기상태). TDD이니 테스트코드부터 작성.
+### 테스트코드를 기반으로 서비스코드를 
+
+1개의 문을 no pass하는 코드(초기상태). TDD이니 테스트코드부터 작성.  
+1개의 문을 no pass 하는 동작을 구현한 테스트코드이다.  
 ~~~
 public class OneHundredDoors2Test {
     @Test
@@ -40,9 +43,7 @@ public class OneHundredDoors2Test {
 }
 ~~~
 
-상기 코드가 1개의 문을 no pass 하는 동작을 구현한 테스트코드이다.  
-
-해당 기능을 수행하는 서비스코드는 다음과 같이 작성될 수 있음.
+그리고 테스트코드를 통과할 서비스코드는 다음과 같이 작성될 수 있음.
 ~~~
     public boolean[] getDoorState() {
         boolean[] doorState = new boolean[]{false};
@@ -74,7 +75,9 @@ public class OneHundredDoors2Test {
 
 이상한점 1.  
 no pass와 one pass가 assert문만 다르고 행하는 동작이 같다? 논리적으로 말이 안된다. 따라서 다음과 같이 수정을 한다.  
-pass '동작' 추가.... 여기서 집중해야 할 것은, pass하는 동작을 추가한다는 것을, 서비스 코드가 아닌 __테스트 코드를 통해__ 파악하고, 테스트코드로 인해 서비스코드가 생겼음을 알 수 있다. 이제 Test Driven Develop의 의미를 조금은 알 것 같지 않은가?(라고 말하지만 나도 여기까지밖에 모르는건 함정.)
+pass '동작' 추가.... 여기서 집중해야 할 것은, pass하는 동작을 추가한다는 것을, 서비스 코드가 아닌 __테스트 코드를 통해__ 파악하고, 테스트코드로 인해 서비스코드가 생겼음을 알 수 있다. 이제 Test Driven Develop의 의미를 조금은 알 것 같지 않은가?(라고 말하지만 나도 여기까지밖에 모르는건 함정.)  
+
+따라서 pass 메소드를 추가하였다.(솔직히 난 저렇게 생각안하고 생성자에 파라미터를 추가했었었다....ㅜㅜ) 그럼 서비스코드는 이제 pass메소드를 구현하면 될 것이다.
 ~~~
     @Test
     public void oneDoorNoPass() throws Exception {
@@ -91,8 +94,8 @@ pass '동작' 추가.... 여기서 집중해야 할 것은, pass하는 동작을
         assertArrayEquals(new boolean[]{true}, doorState);
     }
 ~~~
-pass 메소드를 추가하였다.(솔직히 난 저렇게 생각안하고 생성자에 파라미터를 추가했었었다....ㅜㅜ) 그럼 서비스코드는 이제 pass메소드를 구현하면 될 것이다.
 
+테스트코드를 통과할 서비스코드는 다음과 같이 작성될 수 있음.
 ~~~
 public class OneHundredDoors2 {
 
@@ -112,18 +115,173 @@ public class OneHundredDoors2 {
 - pass메소드를 구현하였고, 토글을 ! unary operator를 붙여 그대로 기존 변수에 assign함
 정도로 파악할 수 있겠다.  
 
-테스트를 돌려보면 모든 서비스로직을 Cover하면서 정상적으로 수행됨을 알 수가 있겠다.  
+__P.S__
+IntelliJ에서 테스트를 돌려보면 어느 영역이 테스트에 Cover되는지 시각적으로 표시해 주는 기능이 있다.  
 내 커스텀 IntelliJ 테마를 기준으로 스크린샷을 떠보면 다음과 같이, 테스트코드가 Cover한 테스트영역은 녹색으로 표시가 된다.  
 ![before](https://raw.githubusercontent.com/zaksal58/zaksal58.github.io/master/TDD/image/before_test_covertage.png)
 ![after](https://raw.githubusercontent.com/zaksal58/zaksal58.github.io/master/TDD/image/test_coverage.png)
 
 ------------
 
+### 테스트범위의 확장
+점차적으로 테스트범위를 확장해 본다.
+문을 1개 늘리는 것이 다음 단계로 진화하는 '1분개발로 테스트가 가능한' 범위가 될 수 있겠다.
+~~~
+    @Test
+    public void oneDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false}, doorState);
+    }
+
+    @Test
+    public void oneDoorOnePass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        oneHundredDoors2.pass();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{true}, doorState);
+    }
+
+    @Test
+    public void twoDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false, false}, doorState);
+    }
+~~~
+다음을 수행해 보면 당연히 테스트가 제대로 성공하지 못할 것이다. 모든 서비스코드를 Cover하지만, 원하는 동작은 아니다.  
+테스트 로직을 보면, oneDoorNoPass()와 동일한 테스트로직임을 파악할 수 있고,
+'문의 갯수' 영역이 빠져있다.  
+문의 갯수 영역을 적절히 추가하여 테스트코드를 만든다. 
+- 어차피 문의 개수는 초기에 정해지고 고정되는 값이므로, 생성자에 문의 갯수를 추가해도 무방함을 알 수 있겠다..
+- twoDoorNoPass메소드 내 테스트로직에, OneHundredDoors2 생성자 파라미터로 문의 갯수를 추가하면, 나머지 oneDoor메소드들에 대해서도 문의 갯수를 정의하여야 한다.
+~~~
+    @Test
+    public void oneDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(1);
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false}, doorState);
+    }
+
+    @Test
+    public void oneDoorOnePass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(1);
+        oneHundredDoors2.pass();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{true}, doorState);
+    }
+
+    @Test
+    public void twoDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(2);
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false, false}, doorState);
+    }
+~~~
+완벽한 테스트코드이다. 이제 실제 서비스코드를 작성해 본다.
+~~~
+public class OneHundredDoors2 {
+
+    boolean[] doorState;
+
+    public OneHundredDoors2(int doorCount) {
+        doorState = new boolean[doorCount];
+    }
+
+    public boolean[] getDoorState() {
+        return doorState;
+    }
+
+    public void pass() {
+        doorState[0] = !doorState[0];
+    }
+}
+~~~
+이전과 변경된 점이라면
+- 생성자를 통해 doorState문 갯수 및 상태 생성
+
+그럼 이제 문 2개를 1pass, 2pass까지 완벽히 수행하게 할 수 있는 테스트코드를 작성해 본다.
+___1문 테스트코드는 생략한다___
+~~~
+    @Test
+    public void twoDoorNoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(2);
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{false, false}, doorState);
+    }
+
+    @Test
+    public void twoDoorOnePass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(2);
+        oneHundredDoors2.pass();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{true, true}, doorState);
+    }
+
+    @Test
+    public void twoDoorTwoPass() throws Exception {
+        OneHundredDoors2 oneHundredDoors2 = new OneHundredDoors2(2);
+        oneHundredDoors2.pass();
+        oneHundredDoors2.pass();
+        boolean[] doorState = oneHundredDoors2.getDoorState();
+        assertArrayEquals(new boolean[]{true, false}, doorState);
+    }
+~~~
+주요 변경점은 다음과 같다.
+- assertArrayEquals 내용이 조금 복잡해졌다(그렇다고 치자.)
+- pass()가 연속으로 2회 호출되었다.
+
+현재 구현한 pass메소드대로라면, 당연히 이 테스트코드를 돌리는 순간 실패하는 케이스가 나올 것이다.  
+상기 적어낸 2가지 주요 변경점을 고려하여, 실제 서비스코드를 작성해 본다.  
+__아직 뚜렷한 규칙성을 찾을 수 없으므로(우린 잘난 개발자들이지만 일단 그렇다고 치자.)하드코딩을 한다는 느낌으로 코드를 작성한다.__
+~~~
+public class OneHundredDoors2 {
+
+    private final int doorCount;
+    boolean[] doorState;
+    private int pass;
+
+
+    public OneHundredDoors2(int doorCount) {
+        this.doorCount = doorCount;
+        doorState = new boolean[doorCount];
+    }
+
+    public boolean[] getDoorState() {
+        return doorState;
+    }
+
+    public void pass() {
+        pass++;
+        if(doorCount == 2) {
+            if(pass == 1) {
+                doorState[0] = !doorState[0];
+                doorState[1] = !doorState[1];
+            }
+            else if(pass == 2) {
+                doorState[1] = !doorState[1];
+            }
+        }
+        else {
+            doorState[0] = !doorState[0];
+        }
+
+    }
+}
+~~~
+변경된 점
+- pass가 연속 2번 호출되는 케이스가 생김으로써 다음과 같이 서비스코드가 변화되었다
+  - 이전 pass상태값을 알아야 한다 --> pass가 몇번 발생하였는지 알아야 한다 --> 클래스 필드 pass 생성
+  - 같은 pass라도 문의 개수에 따라 수행하는 동작이 다르다 --> 문의 개수를 알아야 한다 --> 클래스 필드(문의 개수는 가변이 아니므로 상수화) doorCount 생성
+- pass 메소드가 좀 복잡해지기 시작...  
 
 
 
-## 테스트범위 확인하기
-## 소스 리팩토링하기
+
+
+
+
+
 
 
 
