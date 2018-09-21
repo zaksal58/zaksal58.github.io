@@ -39,9 +39,9 @@ public class OneHundredDoors2Test {
     }
 }
 ~~~
-  
-  
-1개의 문을 no pass 하는 동작을 구현한 테스트코드이다.  
+
+상기 코드가 1개의 문을 no pass 하는 동작을 구현한 테스트코드이다.  
+
 해당 기능을 수행하는 서비스코드는 다음과 같이 작성될 수 있음.
 ~~~
     public boolean[] getDoorState() {
@@ -49,6 +49,8 @@ public class OneHundredDoors2Test {
         return doorState;        
     }
 ~~~
+
+-----------------
 
 뭔가 Hello World 찍는 병맛같은 코드로 보이지만, 테스트케이스 및 동작을 하나하나씩 추가해 보자.  
 1문 no pass 다음의 동작을 1문 1pass. 테스트코드는 이렇게 될거다.  
@@ -115,8 +117,7 @@ public class OneHundredDoors2 {
 ![before](https://raw.githubusercontent.com/zaksal58/zaksal58.github.io/master/TDD/image/before_test_covertage.png)
 ![after](https://raw.githubusercontent.com/zaksal58/zaksal58.github.io/master/TDD/image/test_coverage.png)
 
-
-아직 Hello World수준이다. 
+------------
 
 
 
